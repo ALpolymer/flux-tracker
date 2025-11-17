@@ -1,9 +1,10 @@
-
+import {mockUser} from "./data/mockData.ts";
 
 function App() {
 
+    console.log('Mock User:', mockUser);
 
-  return (
+    return (
       <>
           <h1 className="text-3xl font-bold underline">
               Hello world!
