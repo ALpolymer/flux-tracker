@@ -1,14 +1,52 @@
-import {mockUser} from "./data/mockData.ts";
+import {mockUser, mockCategories, mockWallets, mockTransactions} from "./data/mockData.ts";
 
 function App() {
 
     console.log('Mock User:', mockUser);
+    console.log('MockCategories:', mockCategories);
+    console.log('MockTransactions:', mockTransactions);
+    console.log('MockWallets:', mockWallets);
+
 
     return (
       <>
-          <h1 className="text-3xl font-bold underline">
-              Hello world!
-          </h1>
+
+              <h1 className="text-3xl font-bold underline">
+                  Expense Tracker
+              </h1>
+
+              <div className="mt-4">
+                  <p>✅ Mock Data Loaded Successfully!</p>
+                  <p>📊 Transactions: {mockTransactions.length}</p>
+                  <p>🏷️ Categories: {mockCategories.length}</p>
+                  <p>💰 Wallets: {mockWallets.length}</p>
+              </div>
+
+              {/* Display first 5 transactions */}
+              <div className="mt-6">
+                  <h2 className="text-xl font-bold">Sample Transactions:</h2>
+                  <ul className="mt-2">
+                      {mockTransactions.slice(0, 15).map(transaction => (
+                          <li key={transaction.id} className="border-b py-2">
+                              {transaction.type} - €{transaction.amount}
+                              {transaction.description && ` - ${transaction.description} -`}
+                              - {new Date(transaction.date).toLocaleDateString(
+                              'el-GR', {
+                                  weekday: 'long',
+                                  year: 'numeric',
+                                  month: 'long',
+                                  day: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  second: '2-digit',
+                                  hour12: true
+                              }
+                          )}
+                          </li>
+                      ))}
+                  </ul>
+              </div>
+
       </>
   )
 }
