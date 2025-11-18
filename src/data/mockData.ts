@@ -1,6 +1,7 @@
-import type {User, Category, Wallet} from "../types";
+import type {User, Category, Wallet, Transaction} from "../types";
 import {generateId} from "../utils/generateId.ts";
 import {getRandomDate} from "../utils/getRandomDate.ts";
+import {generateMockTransactions} from "../utils/generateMockTransactions.ts";
 
 
 export const mockUser:User = {
@@ -57,7 +58,7 @@ export const mockCategories:Category[] = [
 ]
 
 
-export const mockWallet:Wallet[] = [
+export const mockWallets:Wallet[] = [
     {
         id: generateId(),
         userId: mockUser.id,
@@ -78,6 +79,6 @@ export const mockWallet:Wallet[] = [
         name: "Binance",
         balance: 2000,
         createdAt: new Date().toISOString(),
-    },
+    }]
 
-]
+    export const mockTransactions:Transaction[] = generateMockTransactions(50, mockWallets, mockCategories)
