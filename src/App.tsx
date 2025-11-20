@@ -1,16 +1,19 @@
 import {mockUser, mockCategories, mockWallets, mockTransactions} from "./data/mockData.ts";
+import {seedData} from "./utils/seedData.ts";
+import {useEffect} from "react";
 
 function App() {
 
-    console.log('Mock User:', mockUser);
-    console.log('MockCategories:', mockCategories);
-    console.log('MockTransactions:', mockTransactions);
-    console.log('MockWallets:', mockWallets);
+    useEffect(() => {
+        seedData(mockUser, "expense-tracker-user");
+        seedData(mockCategories, "expense-tracker-categories");
+        seedData(mockWallets, "expense-tracker-wallets");
+        seedData(mockTransactions, "expense-tracker-transactions");
+    }, []);
 
 
     return (
       <>
-
               <h1 className="text-3xl font-bold underline">
                   Expense Tracker
               </h1>
