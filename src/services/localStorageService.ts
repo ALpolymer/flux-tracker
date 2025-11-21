@@ -1,4 +1,4 @@
-import type {Transaction} from "../types";
+import type {Transaction, Wallet, Category} from "../types";
 
 
 function getAllItems<T>(key: string): T[] {
@@ -18,6 +18,21 @@ function getAllItems<T>(key: string): T[] {
 
 
 export function getAllTransactions(): Transaction[]  {
-    return getAllItems<Transaction>("expense-tracker-categories")
+    return getAllItems<Transaction>("expense-tracker-transactions")
+}
+
+export function getAllWallets(): Wallet[] {
+    return getAllItems<Wallet>("expense-tracker-wallets")
+}
+
+export function getAllCategories(): Category[]{
+    return getAllItems<Category>("expense-tracker-categories")
+}
+
+export function addTransaction(transaction: Transaction) {
+    const transactions = getAllTransactions();
+
+    transactions.push(transaction);
+    localStorage.setItem("expense-tracker-transactions", JSON.stringify(transactions));
 }
 

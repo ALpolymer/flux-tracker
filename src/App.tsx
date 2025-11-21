@@ -1,7 +1,7 @@
 import {mockUser, mockCategories, mockWallets, mockTransactions} from "./data/mockData.ts";
 import {seedData} from "./utils/seedData.ts";
 import {useEffect} from "react";
-import {getAllTransactions} from "./services/localStorageService.ts";
+import {getAllTransactions, getAllWallets, getAllCategories} from "./services/localStorageService.ts";
 
 function App() {
 
@@ -12,8 +12,12 @@ function App() {
         seedData(mockTransactions, "expense-tracker-transactions");
     }, []);
 
-    const transactions = getAllTransactions()
+     const transactions = getAllTransactions()
+    const wallets = getAllWallets()
+    const categories = getAllCategories()
 
+    console.log(wallets);
+    console.log(categories);
     console.log(transactions[0]);
 
     return (
