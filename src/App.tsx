@@ -2,7 +2,7 @@ import {mockUser, mockCategories, mockWallets, mockTransactions} from "./data/mo
 import {seedData} from "./utils/seedData.ts";
 import {generateId} from "./utils/generateId.ts";
 import {useEffect} from "react";
-import {getAllTransactions, getAllWallets, getAllCategories, addTransaction} from "./services/localStorageService.ts";
+import {getAllTransactions, getAllWallets, getAllCategories, removeTransaction} from "./services/localStorageService.ts";
 import type {Transaction} from "./types";
 
 function App() {
@@ -32,7 +32,6 @@ function App() {
         date: new Date().toISOString(),
         createdAt: new Date().toISOString()
     }
-
 
 
 

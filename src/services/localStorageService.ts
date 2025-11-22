@@ -39,3 +39,10 @@ export function addTransaction(transaction: Transaction) {
    localStorage.setItem("expense-tracker-transactions", JSON.stringify(updated));
 }
 
+export function removeTransaction(id: string) {
+    const transactions = getAllTransactions();
+    const updated = transactions.filter((t)=> t.id !== id)
+
+    localStorage.setItem("expense-tracker-transactions", JSON.stringify(updated));
+}
+
