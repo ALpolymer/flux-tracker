@@ -1,7 +1,9 @@
 import {mockUser, mockCategories, mockWallets, mockTransactions} from "./data/mockData.ts";
 import {seedData} from "./utils/seedData.ts";
+import {generateId} from "./utils/generateId.ts";
 import {useEffect} from "react";
-import {getAllTransactions, getAllWallets, getAllCategories} from "./services/localStorageService.ts";
+import {getAllTransactions, getAllWallets, getAllCategories, addTransaction} from "./services/localStorageService.ts";
+import type {Transaction} from "./types";
 
 function App() {
 
@@ -18,7 +20,21 @@ function App() {
 
     console.log(wallets);
     console.log(categories);
-    console.log(transactions[0]);
+    console.log(transactions.length);
+
+    const newTransaction :Transaction = {
+        id: generateId(),
+        walletId: mockWallets[0].id,
+        categoryId: mockCategories[0].id,
+        type: "EXPENSE",
+        amount: 50,
+        description: "test description",
+        date: new Date().toISOString(),
+        createdAt: new Date().toISOString()
+    }
+
+
+
 
     return (
       <>

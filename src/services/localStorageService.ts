@@ -17,6 +17,8 @@ function getAllItems<T>(key: string): T[] {
 }
 
 
+
+
 export function getAllTransactions(): Transaction[]  {
     return getAllItems<Transaction>("expense-tracker-transactions")
 }
@@ -32,7 +34,8 @@ export function getAllCategories(): Category[]{
 export function addTransaction(transaction: Transaction) {
     const transactions = getAllTransactions();
 
-    transactions.push(transaction);
-    localStorage.setItem("expense-tracker-transactions", JSON.stringify(transactions));
+    const updated = [...transactions , transaction];
+
+   localStorage.setItem("expense-tracker-transactions", JSON.stringify(updated));
 }
 
