@@ -46,3 +46,15 @@ export function removeTransaction(id: string) {
     localStorage.setItem("expense-tracker-transactions", JSON.stringify(updated));
 }
 
+export function updateTransaction(id: string, fieldToUpdate: Partial<Transaction>) {
+    const transactions = getAllTransactions();
+
+    const updated = transactions.map(((t)=> {
+        if (t.id === id) {
+            return {...t, ...fieldToUpdate};
+        }
+        return t;
+    }))
+    localStorage.setItem("expense-tracker-transactions", JSON.stringify(updated));
+}
+
