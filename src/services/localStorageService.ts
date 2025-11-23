@@ -19,6 +19,13 @@ function getAllItems<T>(key: string): T[] {
     }
 }
 
+export function getOneItem<T extends HasId>(key: string, id: string): T | undefined
+{
+    const items = getAllItems<T>(key);
+
+    return items.find((i)=> i.id === id)
+}
+
 export function addItem<T>(key: string, item: T){
     const items = getAllItems<T>(key)
 
