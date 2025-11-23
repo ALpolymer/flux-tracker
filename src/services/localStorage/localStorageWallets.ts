@@ -2,7 +2,7 @@ import type {Wallet} from "../../types";
 import {STORAGE_KEYS} from "./types.ts";
 import {getAllItems, getOneItem, removeItem, updateItem, addItem} from "./localStorageHelpers.ts";
 
-export function getAllCategories(): Wallet[] {
+export function getAllWallets(): Wallet[] {
     return getAllItems<Wallet>(STORAGE_KEYS.WALLETS);
 }
 
