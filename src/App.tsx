@@ -2,8 +2,9 @@ import {mockUser, mockCategories, mockWallets, mockTransactions} from "./data/mo
 import {seedData} from "./utils/seedData.ts";
 import {generateId} from "./utils/generateId.ts";
 import {useEffect} from "react";
-import {getAllTransactions, getAllWallets, getAllCategories, addTransaction} from "./services/localStorageService.ts";
 import type {Transaction} from "./types";
+
+import {getAllTransactions, getTransactionById, addTransaction, removeTransaction} from "./services/localStorage/localStorageTransactions.ts";
 
 function App() {
 
@@ -14,13 +15,10 @@ function App() {
         seedData(mockTransactions, "expense-tracker-transactions");
     }, []);
 
-     const transactions = getAllTransactions()
-    const wallets = getAllWallets()
-    const categories = getAllCategories()
-
-    console.log(wallets);
-    console.log(categories);
-    console.log(transactions.length);
+    const transactions = getAllTransactions();
+    console.log(transactions[0]);
+    const transaction = getTransactionById("e55d07f6-b3f4-404a-b7b9-d89c7ecd");
+    console.log(transaction);
 
     const newTransaction :Transaction = {
         id: generateId(),
@@ -33,7 +31,7 @@ function App() {
         createdAt: new Date().toISOString()
     }
 
-    addTransaction("expense-tracker-transactions", newTransaction);
+
 
     return (
       <>

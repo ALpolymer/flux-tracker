@@ -1,10 +1,6 @@
-import type {Transaction, Wallet, Category} from "../types";
+import type {HasId} from "./types.ts";
 
-interface HasId{
-    id: string;
-}
-
-function getAllItems<T>(key: string): T[] {
+export function getAllItems<T>(key: string): T[] {
     const items = localStorage.getItem(key)
 
     try{
@@ -19,12 +15,14 @@ function getAllItems<T>(key: string): T[] {
     }
 }
 
+
 export function getOneItem<T extends HasId>(key: string, id: string): T | undefined
 {
     const items = getAllItems<T>(key);
 
     return items.find((i)=> i.id === id)
 }
+
 
 export function addItem<T>(key: string, item: T){
     const items = getAllItems<T>(key)
@@ -34,6 +32,7 @@ export function addItem<T>(key: string, item: T){
     localStorage.setItem(key, JSON.stringify(updated));
 
 }
+
 
 export function removeItem<T extends HasId>(key: string, id: string){
     const items = getAllItems<T>(key)
@@ -55,32 +54,3 @@ export function updateItem<T extends HasId>(key: string, id: string, fieldToUpda
 
     localStorage.setItem(key, JSON.stringify(updated));
 }
-
-
-
-
-export function getAllTransactions(): Transaction[]  {
-    return getAllItems<Transaction>("expense-tracker-transactions")
-}
-
-export function getAllWallets(): Wallet[] {
-    return getAllItems<Wallet>("expense-tracker-wallets")
-}
-
-export function getAllCategories(): Category[]{
-    return getAllItems<Category>("expense-tracker-categories")
-}
-
-export function addTransaction(transaction: Transaction) {
-  addItem<Transaction>("expense-tracker-transactions", transaction);
-}
-
-export function removeTransaction(id: string) {
-
-    removeItem<Transaction>("expense-tracker-transactions", id);
-}
-
-export function updateTransaction(id: string, fieldToUpdate: Partial<Transaction>) {
-    updateItem<Transaction>("expense-tracker-transactions", id, fieldToUpdate);
-}
-
