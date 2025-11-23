@@ -16,6 +16,15 @@ function getAllItems<T>(key: string): T[] {
     }
 }
 
+export function addItem<T>(key: string, item: T){
+    const items = getAllItems<T>(key)
+
+    const updated = [...items , item ];
+
+    localStorage.setItem(key, JSON.stringify(updated));
+
+}
+
 
 
 
@@ -31,12 +40,8 @@ export function getAllCategories(): Category[]{
     return getAllItems<Category>("expense-tracker-categories")
 }
 
-export function addTransaction(transaction: Transaction) {
-    const transactions = getAllTransactions();
-
-    const updated = [...transactions , transaction];
-
-   localStorage.setItem("expense-tracker-transactions", JSON.stringify(updated));
+export function addTransaction(key:string, transaction: Transaction) {
+  addItem<Transaction>(key, transaction);
 }
 
 export function removeTransaction(id: string) {
