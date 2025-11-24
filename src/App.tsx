@@ -1,77 +1,22 @@
-import {mockUser, mockCategories, mockWallets, mockTransactions} from "./data/mockData.ts";
-import {seedData} from "./utils/seedData.ts";
-import {generateId} from "./utils/generateId.ts";
-import {useEffect} from "react";
-import type {Transaction} from "./types";
-
-import {getAllTransactions, getTransactionById, addTransaction, removeTransaction} from "./services/localStorage/localStorageTransactions.ts";
+import {Routes, Route} from "react-router";
+import Home from "./components/Home.tsx";
+import About from "./components/About.tsx";
+import Navbar from "./components/Navbar.tsx";
+import NoMatch from "./components/NoMatch.tsx";
 
 function App() {
-
-    useEffect(() => {
-        seedData(mockUser, "expense-tracker-user");
-        seedData(mockCategories, "expense-tracker-categories");
-        seedData(mockWallets, "expense-tracker-wallets");
-        seedData(mockTransactions, "expense-tracker-transactions");
-    }, []);
-
-    const transactions = getAllTransactions();
-    console.log(transactions[0]);
-    const transaction = getTransactionById("e55d07f6-b3f4-404a-b7b9-d89c7ecd");
-    console.log(transaction);
-
-    const newTransaction :Transaction = {
-        id: generateId(),
-        walletId: mockWallets[0].id,
-        categoryId: mockCategories[0].id,
-        type: "EXPENSE",
-        amount: 50,
-        description: "test description",
-        date: new Date().toISOString(),
-        createdAt: new Date().toISOString()
-    }
 
 
 
     return (
-      <>
-              <h1 className="text-3xl font-bold underline">
-                  Expense Tracker
-              </h1>
-
-              <div className="mt-4">
-                  <p>✅ Mock Data Loaded Successfully!</p>
-                  <p>📊 Transactions: {mockTransactions.length}</p>
-                  <p>🏷️ Categories: {mockCategories.length}</p>
-                  <p>💰 Wallets: {mockWallets.length}</p>
-              </div>
-
-              {/* Display first 5 transactions */}
-              <div className="mt-6">
-                  <h2 className="text-xl font-bold">Sample Transactions:</h2>
-                  <ul className="mt-2">
-                      {mockTransactions.slice(0, 15).map(transaction => (
-                          <li key={transaction.id} className="border-b py-2">
-                              {transaction.type} - €{transaction.amount}
-                              {transaction.description && ` - ${transaction.description} -`}
-                              - {new Date(transaction.date).toLocaleDateString(
-                              'el-GR', {
-                                  weekday: 'long',
-                                  year: 'numeric',
-                                  month: 'long',
-                                  day: 'numeric',
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                  second: '2-digit',
-                                  hour12: true
-                              }
-                          )}
-                          </li>
-                      ))}
-                  </ul>
-              </div>
-
-      </>
+        <>
+            <Navbar/>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="about" element={<About />}/>
+                <Route path = "*" element={<NoMatch/>} />
+            </Routes>
+        </>
   )
 }
 
