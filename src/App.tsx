@@ -20,10 +20,11 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="about" element={<About />} />
                 <Route path="flux" element={<Tracker/>}>
-                    <Route path="dashboard" element={<Dashboard/>}/>
+                    <Route index element={<Dashboard/>}/>
                     <Route path="expenses" element={<Expenses/>}/>
                     <Route path="wallets" element={<Wallets/>}/>
                     <Route path="categories" element={<Categories/>}/>
+                    <Route path="dashboard" element={<Dashboard/>}/>
                 </Route>
                 <Route path = "*" element={<NoMatch/>} />
             </Routes>
