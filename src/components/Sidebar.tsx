@@ -1,13 +1,55 @@
-import {Link} from 'react-router';
+import {NavLink} from 'react-router';
 const Sidebar = () => {
     return (
-        <div className="bg-blue-200">
+        <div className="bg-stone-100  flex flex-col items-center justify-start px-8 py-3 border border-transparent shadow rounded-md">
             Sidebar
             <nav className="flex flex-col items-center gap-x-2 justify-between">
-                <Link to="dashboard">Dashboard</Link>
-                <Link to="expenses">Expenses</Link>
-                <Link to="wallets">Wallets</Link>
-                <Link to="categories">Categories</Link>
+                <NavLink
+                    to="dashboard"
+                    className={({ isActive }) =>
+                        `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                            isActive
+                                ? 'bg-indigo-50 text-indigo-700'
+                                : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                        }`
+                    }
+                >
+                    Dashboard
+                </NavLink>
+
+                <NavLink to="expenses"
+                         className={({ isActive }) =>
+                             `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                                 isActive
+                                     ? 'bg-indigo-50 text-indigo-700'
+                                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                             }`
+                         }>
+
+                    Expenses
+                </NavLink>
+                <NavLink to="wallets"
+                         className={({ isActive }) =>
+                             `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                                 isActive
+                                     ? 'bg-indigo-50 text-indigo-700'
+                                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                             }`
+                         }
+                >Wallets
+                </NavLink>
+
+                <NavLink to="categories"
+                         className={({ isActive }) =>
+                             `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                                 isActive
+                                     ? 'bg-indigo-50 text-indigo-700'
+                                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                             }`
+                         }
+                >
+                    Categories
+                </NavLink>
             </nav>
         </div>
     );
