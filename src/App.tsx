@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard.tsx";
 import Expenses from "./components/Expenses.tsx";
 import Wallets from "./components/Wallets.tsx";
 import Categories from "./components/Categories.tsx";
+import Login from "./components/Login.tsx";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="about" element={<About />} />
+                <Route path="login" element={<Login/>}/>
                 <Route path="flux" element={<Tracker/>}>
                     <Route index element={<Dashboard/>}/>
                     <Route path="expenses" element={<Expenses/>}/>
