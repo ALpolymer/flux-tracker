@@ -38,5 +38,9 @@ export interface Transaction {
     date: string;
     createdAt: string;
     updatedAt?: string;
+}
 
+export type LoginFormFields = {
+    email: string;
+    password: string;
 }

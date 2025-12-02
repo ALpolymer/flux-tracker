@@ -33,7 +33,7 @@ export const mockCategories:Category[] = [
     },
     {
         id: generateId(),
-        userId: mockUsers[2].id,
+        userId: mockUsers[0].id,
         name:"Gas",
         createdAt: getRandomDate(30),
     },
@@ -44,7 +44,7 @@ export const mockCategories:Category[] = [
     },
     {
         id: generateId(),
-        userId: mockUsers[1].id,
+        userId: mockUsers[0].id,
         name:"Entertainment",
         createdAt: getRandomDate(30),
     },
