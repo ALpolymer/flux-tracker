@@ -9,12 +9,11 @@ import Expenses from "./components/Expenses.tsx";
 import Wallets from "./components/Wallets.tsx";
 import Categories from "./components/Categories.tsx";
 import Login from "./components/Login.tsx";
-
-import {mockUser} from "./data/mockData.ts";
+import {mockUsers} from "./data/mockData.ts";
 import {seedData} from "./utils/seedData.ts";
 import type {User} from "./types";
 
-seedData<User>(mockUser, "flux-user")
+seedData<User[]>(mockUsers, "flux-tracker-users")
 
 
 function App() {
