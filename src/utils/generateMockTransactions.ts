@@ -36,8 +36,6 @@ export const generateMockTransactions = (count: number, wallets: Wallet[], categ
 
     }
 
-
-
     for (let i = 0; i < count; i++) {
         const [transactionType, transactionAmount] = randomizeTransactionTypeAmount();
 

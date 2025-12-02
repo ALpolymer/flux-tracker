@@ -1,20 +1,29 @@
 import {useForm, type SubmitHandler} from "react-hook-form";
+import  {fakeAuth} from "../utils/fakeAuth.ts";
+import type {LoginFormFields} from "../types";
 
-type FormFields = {
-    email: string;
-    password: string;
-}
-
-const onSubmit : SubmitHandler<FormFields> = (data) => {
-    console.log(data);
-}
 
 const Login = () => {
 
     const {register
         ,handleSubmit
+        ,setError
         , formState: {errors, isSubmitting}
-    } = useForm<FormFields>();
+    } = useForm<LoginFormFields>();
+
+
+    const onSubmit : SubmitHandler<LoginFormFields> = async (data) => {
+        try {
+            await fakeAuth(data)
+        } catch (e) {
+            setError(
+                "root",{
+                    message:(e as Error).message,
+                }
+            )
+        }
+    }
+
 
     return (
         <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
