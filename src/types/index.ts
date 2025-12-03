@@ -1,3 +1,4 @@
+
 export interface User{
     id: string;
     username: string;
@@ -40,7 +41,15 @@ export interface Transaction {
     updatedAt?: string;
 }
 
-export type LoginFormFields = {
+export interface AuthResponse {
+    token: string;
+    user: {
+        username: string;
+        email: string;
+    }
+}
+
+export interface LoginFormFields  {
     email: string;
     password: string;
 }

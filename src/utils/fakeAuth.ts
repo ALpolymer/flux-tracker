@@ -1,5 +1,5 @@
 import type {User} from "../types";
-import type {LoginFormFields} from "../types";
+import type {LoginFormFields, AuthResponse} from "../types";
 
 const fetcher = (key: string):User[]=>{
     const data = localStorage.getItem(key);
@@ -11,7 +11,7 @@ const fetcher = (key: string):User[]=>{
     return JSON.parse(data);
 }
 
-export const fakeAuth = (submittedUser: LoginFormFields): Promise<string> => {
+export const fakeAuth = (submittedUser: LoginFormFields): Promise<AuthResponse> => {
     const savedUsers = fetcher("flux-tracker-users");
     console.log("Local Storage Users:",savedUsers);
     console.log("Submitted User",submittedUser)
@@ -40,7 +40,13 @@ export const fakeAuth = (submittedUser: LoginFormFields): Promise<string> => {
 
     if (foundUser && foundUserPassword) {
         return new Promise((resolve) => {
-            setTimeout(() => resolve("2342f2f1d131rf12"), 1000);
+            setTimeout(() => resolve({
+                token: "2342f2f1d131rf12",
+                user: {
+                    username: foundUser.username,
+                    email: foundUser.email,
+                }
+            }), 1000);
         });
     } else {
         return new Promise((_, reject) => {
