@@ -13,8 +13,7 @@ const fetcher = (key: string):User[]=>{
 
 export const fakeAuth = (submittedUser: LoginFormFields): Promise<AuthResponse> => {
     const savedUsers = fetcher("flux-tracker-users");
-    console.log("Local Storage Users:",savedUsers);
-    console.log("Submitted User",submittedUser)
+
 
     if(!savedUsers.length){
         return new Promise((_, reject) => {
