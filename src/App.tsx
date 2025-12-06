@@ -8,7 +8,8 @@ import Dashboard from "./components/Dashboard.tsx";
 import Expenses from "./components/Expenses.tsx";
 import Wallets from "./components/Wallets.tsx";
 import Categories from "./components/Categories.tsx";
-import Login from "./components/Login.tsx";
+import SignIn from "./components/SignIn.tsx";
+import SignUp from "./components/SignUp.tsx";
 import {mockUsers} from "./data/mockData.ts";
 import {seedData} from "./utils/seedData.ts";
 import type {User} from "./types";
@@ -29,7 +30,8 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="about" element={<About />} />
-                    <Route path="login" element={<Login/>}/>
+                    <Route path="signin" element={<SignIn/>}/>
+                    <Route path="signup" element={<SignUp/>}/>
                     <Route path="flux" element={<Tracker/>}>
                         <Route index element={<Dashboard/>}/>
                         <Route path="expenses" element={<Expenses/>}/>
