@@ -1,5 +1,6 @@
 import type {User} from "../types";
 import type {LoginFormFields, AuthResponse} from "../types";
+import {STORAGE_KEYS} from "../services/localStorage/types.ts";
 
 const fetcher = (key: string):User[]=>{
     const data = localStorage.getItem(key);
@@ -12,7 +13,7 @@ const fetcher = (key: string):User[]=>{
 }
 
 export const fakeAuth = (submittedUser: LoginFormFields): Promise<AuthResponse> => {
-    const savedUsers = fetcher("flux-tracker-users");
+    const savedUsers = fetcher(STORAGE_KEYS.USERS);
 
 
     if(!savedUsers.length){

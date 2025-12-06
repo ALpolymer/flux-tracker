@@ -12,9 +12,10 @@ import Login from "./components/Login.tsx";
 import {mockUsers} from "./data/mockData.ts";
 import {seedData} from "./utils/seedData.ts";
 import type {User} from "./types";
+import {STORAGE_KEYS} from "./services/localStorage/types.ts";
 import {AuthProvider} from "./context/AuthProvider.tsx";
 
-seedData<User[]>(mockUsers, "flux-tracker-users")
+seedData<User[]>(mockUsers, STORAGE_KEYS.USERS)
 
 
 function App() {
