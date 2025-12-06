@@ -1,9 +1,14 @@
 import {useForm, type SubmitHandler} from "react-hook-form";
-import  {fakeAuth} from "../utils/fakeAuth.ts";
 import type {LoginFormFields} from "../types";
+import {useNavigate} from "react-router";
+import {useAuth} from "../context/useAuth.ts";
 
 
 const Login = () => {
+
+    const navigate = useNavigate();
+
+    const {onLogin} =useAuth()
 
     const {register
         ,handleSubmit
@@ -14,7 +19,8 @@ const Login = () => {
 
     const onSubmit : SubmitHandler<LoginFormFields> = async (data) => {
         try {
-            await fakeAuth(data)
+            await onLogin(data);
+            navigate("/flux");
         } catch (e) {
             setError(
                 "root",{
