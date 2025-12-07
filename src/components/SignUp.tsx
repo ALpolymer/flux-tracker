@@ -1,6 +1,57 @@
 import {Link} from "react-router";
+import type {SignUpFormFields} from "../types";
+import {z} from "zod";
+import {useForm, type SubmitHandler} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+
+
+const passwordSchema = z.string()
+        .min(1, "Password is required")
+        .min(8, "Password must be at least 8 characters long")
+        .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+        .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+        .regex(/[0-9]/, "Password must contain at least one number")
+        .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character");
+
+const SignUpSchema = z.object({
+    username: z.string()
+        .min(2, "Username must be at least 3 characters long")
+        .max(30, "Username too long"),
+    email: z
+        .string()
+        .min(1, "Email is required")
+        .pipe(
+            z.email({ message: "Invalid email address" })
+        ),
+    password: passwordSchema,
+    confirmPassword: passwordSchema,
+}).refine((data) => data.password === data.confirmPassword,{
+    message:"Passwords don't match",
+    path: ["confirmPassword"]
+});
+
+
 
 const SignUp = () => {
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<SignUpFormFields>({
+        resolver: zodResolver(SignUpSchema),
+        defaultValues: {
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: ""
+        }
+    })
+
+    const onSubmit: SubmitHandler<SignUpFormFields> = (data) => {
+        console.log(data)
+    }
+
     return (
         <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-slate-100">
@@ -13,41 +64,45 @@ const SignUp = () => {
                     </p>
                 </div>
 
-                <form className="mt-8 space-y-6">
+                <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
                     <div className="rounded-md">
                         <div className="mb-4">
                             <label htmlFor="username" className="sr-only">Username</label>
                             <input
-
+                                {...register("username")}
                                 className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Username"
                             />
+                            {errors.username && (<p className="text-red-600 text-sm">{errors.username.message}</p>)}
                         </div>
                         <div className="mb-4">
                             <label htmlFor="email-address" className="sr-only">Email address</label>
                             <input
-
+                                {...register("email")}
                                 className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Email address"
                             />
+                            {errors.email && (<p className="text-red-600 text-sm">{errors.email.message}</p>)}
                         </div>
                         <div className="mb-4">
                             <label htmlFor="password" className="sr-only">Password</label>
                             <input
-
+                                {...register("password")}
                                 type="password"
                                 className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Password"
                             />
+                            {errors.password && (<p className="text-red-600 text-sm">{errors.password.message}</p>)}
                         </div>
                         <div className="mb-4">
                             <label htmlFor="confirm-password" className="sr-only">Confirm Password</label>
                             <input
-
+                                {...register("confirmPassword")}
                                 type="password"
                                 className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Confirm Password"
                             />
+                            {errors.confirmPassword && (<p className="text-red-600 text-sm">{errors.confirmPassword.message}</p>)}
                         </div>
                     </div>
 
