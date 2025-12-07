@@ -24,11 +24,16 @@ const SignUpSchema = z.object({
             z.email({ message: "Invalid email address" })
         ),
     password: passwordSchema,
-    confirmPassword: passwordSchema,
-}).refine((data) => data.password === data.confirmPassword,{
-    message:"Passwords don't match",
-    path: ["confirmPassword"]
-});
+    confirmPassword: z.string().min(1),
+}).superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+        ctx.addIssue({
+            code: "custom",
+            message: "Passwords don't match",
+            path: ['confirmPassword'],
+        });
+    }
+})
 
 
 
