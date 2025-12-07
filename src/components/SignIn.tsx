@@ -72,13 +72,7 @@ const SignIn = () => {
                         <div className="mb-4">
                             <label htmlFor="email-address" className="sr-only">Email address</label>
                             <input
-                                {...register("email",{
-                                    required: "Email is required",
-                                    pattern:{
-                                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                        message: "Not a valid email"
-                                    }
-                                })}
+                                {...register("email",)}
                                 className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Email address"
                             />
@@ -87,14 +81,7 @@ const SignIn = () => {
                         <div>
                             <label htmlFor="password" className="sr-only">Password</label>
                             <input
-                                {...register("password", {
-                                    required:"Password is required",
-                                    minLength:{
-                                        value: 8,
-                                        message: "Password must be at least 8 characters long"
-                                    }
-
-                                })}
+                                {...register("password")}
                                 type="password"
                                 className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                 placeholder="Password"
