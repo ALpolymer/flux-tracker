@@ -11,7 +11,7 @@ const Navbar = () => {
 
                     <div className="flex items-center space-x-3">
                         <NavLink
-                            to="/register"
+                            to="/signup"
                             className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
                         >
                             Sign Up
