@@ -12,7 +12,7 @@ const fetcher = (key: string):User[]=>{
     return JSON.parse(data);
 }
 
-export const fakeAuth = (submittedUser: LoginFormFields): Promise<AuthResponse> => {
+export const fakeSignIn = (submittedUser: LoginFormFields): Promise<AuthResponse> => {
     const savedUsers = fetcher(STORAGE_KEYS.USERS);
 
 

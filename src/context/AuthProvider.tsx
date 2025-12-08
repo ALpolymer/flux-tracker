@@ -3,7 +3,7 @@ import {AuthContext} from "./AuthContext.ts";
 import {useState} from "react";
 import type {LoginFormFields, AuthResponse} from "../types";
 import {STORAGE_KEYS} from "../services/localStorage/types.ts";
-import {fakeAuth} from "../utils/fakeAuth.ts";
+import {fakeSignIn} from "../utils/fakeAuth.ts";
 
 
 type AuthProviderProps = {
@@ -21,7 +21,7 @@ export const AuthProvider = ({children}:AuthProviderProps) => {
     });
 
     const handleLogin = async (submittedUser: LoginFormFields) => {
-        const validatedUser = await fakeAuth(submittedUser);
+        const validatedUser = await fakeSignIn(submittedUser);
         setAuthResponse(validatedUser)
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(validatedUser));
     }
