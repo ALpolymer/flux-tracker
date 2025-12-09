@@ -1,8 +1,10 @@
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 import type {SignUpFormFields} from "../types";
 import {z} from "zod";
 import {useForm, type SubmitHandler} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {fakeSignUp} from "../utils/fakeAuth.ts";
+
 
 
 const passwordSchema = z.string()
@@ -24,7 +26,7 @@ const SignUpSchema = z.object({
             z.email({ message: "Invalid email address" })
         ),
     password: passwordSchema,
-    confirmPassword: z.string().min(1),
+    confirmPassword: z.string().min(1, "Confirm password is required"),
 }).superRefine(({ confirmPassword, password }, ctx) => {
     if (confirmPassword !== password) {
         ctx.addIssue({
@@ -39,9 +41,12 @@ const SignUpSchema = z.object({
 
 const SignUp = () => {
 
+    const navigate = useNavigate();
+
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors },
     } = useForm<SignUpFormFields>({
         resolver: zodResolver(SignUpSchema),
@@ -53,9 +58,19 @@ const SignUp = () => {
         }
     })
 
-    const onSubmit: SubmitHandler<SignUpFormFields> = (data) => {
-        console.log(data)
-    }
+    const onSubmit: SubmitHandler<SignUpFormFields> = (signUpData) => {
+        try{
+            fakeSignUp(signUpData);
+            navigate("/signin");
+        }
+         catch(e){
+             setError(
+                 "root",{
+                     message:(e as Error).message,
+                 }
+             )
+         }
+        }
 
     return (
         <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -119,6 +134,7 @@ const SignUp = () => {
                             Sign up
                         </button>
                     </div>
+                    {errors.root && (<p className="text-red-600 text-sm">{errors.root.message}</p>)}
                     <div className="w-fit text-slate-600 text-sm">
                         Have an account?
                         <span>

@@ -1,6 +1,7 @@
 import type {User} from "../types";
-import type {LoginFormFields, AuthResponse} from "../types";
+import type {LoginFormFields, AuthResponse, SignUpFormFields} from "../types";
 import {STORAGE_KEYS} from "../services/localStorage/types.ts";
+import {generateId} from "./generateId.ts";
 
 const fetcher = (key: string):User[]=>{
     const data = localStorage.getItem(key);
@@ -54,4 +55,36 @@ export const fakeSignIn = (submittedUser: LoginFormFields): Promise<AuthResponse
         });
     }
 
+}
+
+export const fakeSignUp = (signUpData: SignUpFormFields) => {
+        const savedUsers = fetcher(STORAGE_KEYS.USERS);
+
+        if(!savedUsers.length){
+            throw new Error("Could not fetch users");
+        }
+
+        const emailExists = savedUsers.some((u) => u.email === signUpData.email)
+
+        if(emailExists){
+           throw new Error("Email already exists");
+        }
+
+        const userNameExists = savedUsers.some((u) => u.username === signUpData.username)
+
+        if(userNameExists){
+            throw new Error("Username already exists");
+        }
+
+        const newUser :User = {
+            id: generateId(),
+            username: signUpData.username,
+            email: signUpData.email,
+            password: signUpData.password,
+            createdAt: new Date().toISOString()
+        }
+
+        const updatedUsers = [...savedUsers, newUser];
+
+        localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(updatedUsers));
 }
