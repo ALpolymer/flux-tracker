@@ -57,23 +57,23 @@ export const fakeSignIn = (submittedUser: LoginFormFields): Promise<AuthResponse
 
 }
 
-export const fakeSignUp = (signUpData: SignUpFormFields) => {
+export const fakeSignUp = (signUpData: SignUpFormFields) :Promise<void> => {
         const savedUsers = fetcher(STORAGE_KEYS.USERS);
-
-        if(!savedUsers.length){
-            throw new Error("Could not fetch users");
-        }
 
         const emailExists = savedUsers.some((u) => u.email === signUpData.email)
 
         if(emailExists){
-           throw new Error("Email already exists");
+           return new Promise((_, reject) => {
+               setTimeout(()=>reject(new Error("Email already exists")), 1000)
+           })
         }
 
         const userNameExists = savedUsers.some((u) => u.username === signUpData.username)
 
         if(userNameExists){
-            throw new Error("Username already exists");
+            return new Promise((_, reject) => {
+                setTimeout(()=>reject(new Error("Username already exists")), 1000)
+            })
         }
 
         const newUser :User = {
@@ -87,4 +87,8 @@ export const fakeSignUp = (signUpData: SignUpFormFields) => {
         const updatedUsers = [...savedUsers, newUser];
 
         localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(updatedUsers));
+
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(), 1000);
+        });
 }

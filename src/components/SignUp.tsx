@@ -47,7 +47,7 @@ const SignUp = () => {
         register,
         handleSubmit,
         setError,
-        formState: { errors },
+        formState: { errors , isSubmitting},
     } = useForm<SignUpFormFields>({
         resolver: zodResolver(SignUpSchema),
         defaultValues: {
@@ -58,9 +58,9 @@ const SignUp = () => {
         }
     })
 
-    const onSubmit: SubmitHandler<SignUpFormFields> = (signUpData) => {
+    const onSubmit: SubmitHandler<SignUpFormFields> = async (signUpData) => {
         try{
-            fakeSignUp(signUpData);
+            await fakeSignUp(signUpData);
             navigate("/signin");
         }
          catch(e){
@@ -129,9 +129,13 @@ const SignUp = () => {
                     <div className="flex flex-col items-start justify-center gap-2">
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                            disabled={isSubmitting}
+                            className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white
+    ${isSubmitting ? "bg-gray-500" : "bg-indigo-600 hover:bg-indigo-700"}
+    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 
+    transition-colors duration-200`}
                         >
-                            Sign up
+                            {isSubmitting ? "Loading..." : "Sign up"}
                         </button>
                     </div>
                     {errors.root && (<p className="text-red-600 text-sm">{errors.root.message}</p>)}
