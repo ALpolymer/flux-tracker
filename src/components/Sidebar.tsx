@@ -50,6 +50,7 @@ const Sidebar = () => {
                 >
                     Categories
                 </NavLink>
+
             </nav>
         </div>
     );

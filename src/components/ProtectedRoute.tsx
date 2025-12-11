@@ -1,22 +1,13 @@
 import {Outlet,Navigate} from "react-router";
-import type {AuthResponse} from "../types";
-import * as React from "react";
+import {useAuth} from "../context/useAuth.ts";
 
 
-type ProtectedRouteProps = {
-    user: AuthResponse | null;
-    redirectPath?: string;
-    children?: React.ReactNode;
-};
 
-export const ProtectedRoute = ({
-                            user,
-                            redirectPath = "/",
-                            children,
-                        }: ProtectedRouteProps) => {
-    if (!user) {
-        return <Navigate to={redirectPath} replace />;
+export const ProtectedRoute = () => {
+    const {authResponse} = useAuth();
+    if (!authResponse) {
+        return <Navigate to={"/signin"} replace />;
     }
 
-    return children ? children : <Outlet/>
+    return  <Outlet/>
 };

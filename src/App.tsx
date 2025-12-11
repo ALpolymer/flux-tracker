@@ -15,6 +15,7 @@ import {seedData} from "./utils/seedData.ts";
 import type {User} from "./types";
 import {STORAGE_KEYS} from "./services/localStorage/types.ts";
 import {AuthProvider} from "./context/AuthProvider.tsx";
+import {ProtectedRoute} from "./components/ProtectedRoute.tsx";
 
 seedData<User[]>(mockUsers, STORAGE_KEYS.USERS)
 
@@ -32,13 +33,17 @@ function App() {
                     <Route path="about" element={<About />} />
                     <Route path="signin" element={<SignIn/>}/>
                     <Route path="signup" element={<SignUp/>}/>
-                    <Route path="flux" element={<Tracker/>}>
-                        <Route index element={<Dashboard/>}/>
-                        <Route path="expenses" element={<Expenses/>}/>
-                        <Route path="wallets" element={<Wallets/>}/>
-                        <Route path="categories" element={<Categories/>}/>
-                        <Route path="dashboard" element={<Dashboard/>}/>
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="flux" element={<Tracker/>}>
+                            <Route index element={<Dashboard/>}/>
+                            <Route path="expenses" element={<Expenses/>}/>
+                            <Route path="wallets" element={<Wallets/>}/>
+                            <Route path="categories" element={<Categories/>}/>
+                            <Route path="dashboard" element={<Dashboard/>}/>
+                        </Route>
                     </Route>
+
+
                     <Route path = "*" element={<NoMatch/>} />
                 </Routes>
             </AuthProvider>
