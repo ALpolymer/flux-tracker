@@ -1,5 +1,6 @@
 import {NavLink} from 'react-router'
 
+
 const Navbar = () => {
     return (
         <nav className="bg-white shadow-sm border-b border-gray-200">

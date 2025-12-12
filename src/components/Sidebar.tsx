@@ -1,4 +1,5 @@
 import {NavLink} from 'react-router';
+import LogOut from "./LogOut.tsx";
 const Sidebar = () => {
     return (
         <div className="bg-stone-100  flex flex-col items-center justify-start px-8 py-3 border border-transparent shadow rounded-md">
@@ -50,7 +51,7 @@ const Sidebar = () => {
                 >
                     Categories
                 </NavLink>
-
+                <LogOut/>
             </nav>
         </div>
     );
