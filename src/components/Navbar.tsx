@@ -9,9 +9,17 @@ const Navbar = () => {
         <nav className="bg-white shadow-sm border-b border-gray-200">
             <div className="w-full px-6">
                 <div className="flex justify-between items-center h-16">
-                    <NavLink to="/" className="text-xl font-bold text-gray-900">
-                        FLUX
-                    </NavLink>
+
+                    {authResponse ?
+                        <div className="text-xl font-bold text-gray-900">
+                            FLUX
+                        </div>
+                        :
+                        <NavLink to="/" className="text-xl font-bold text-gray-900">
+                            FLUX
+                        </NavLink>
+                    }
+
 
                     {authResponse ?
                         <div className = "w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-xl font-bold">
