@@ -22,7 +22,7 @@ const Navbar = () => {
 
 
                     {authResponse ?
-                        <div className = "w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-xl font-bold">
+                        <div className = "w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-xl font-semibold">
                             {authResponse.user.username.substring(0,1).toUpperCase()}
                         </div>
                     :

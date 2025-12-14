@@ -1,4 +1,5 @@
 import {Routes, Route} from "react-router";
+import {useEffect} from "react";
 import Home from "./components/Home.tsx";
 import About from "./components/About.tsx";
 import Navbar from "./components/Navbar.tsx";
@@ -10,17 +11,23 @@ import Wallets from "./components/Wallets.tsx";
 import Categories from "./components/Categories.tsx";
 import SignIn from "./components/SignIn.tsx";
 import SignUp from "./components/SignUp.tsx";
-import {mockUsers} from "./data/mockData.ts";
 import {seedData} from "./utils/seedData.ts";
-import type {User} from "./types";
 import {STORAGE_KEYS} from "./services/localStorage/types.ts";
 import {AuthProvider} from "./context/AuthProvider.tsx";
 import {ProtectedRoute} from "./components/ProtectedRoute.tsx";
+import { mockCategories, mockWallets, mockTransactions, mockUsers} from "./data/mockData.ts";
 
-seedData<User[]>(mockUsers, STORAGE_KEYS.USERS)
+
 
 
 function App() {
+
+    useEffect(()=>{
+        seedData(mockCategories, STORAGE_KEYS.CATEGORIES);
+        seedData(mockWallets, STORAGE_KEYS.WALLETS);
+        seedData(mockTransactions, STORAGE_KEYS.TRANSACTIONS);
+        seedData(mockUsers, STORAGE_KEYS.USERS);
+    },[])
 
 
 

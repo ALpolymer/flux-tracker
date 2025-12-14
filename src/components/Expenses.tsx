@@ -1,57 +1,26 @@
 import { Pencil, Trash2 } from 'lucide-react';
+import type  {Transaction,Wallet} from "../types";
+import{getAllItems} from "../services/localStorage/localStorageHelpers.ts";
+import {STORAGE_KEYS} from "../services/localStorage/types.ts";
 
 
-interface Expense {
-    id: string;
-    date: string;
-    description: string;
-    category: string;
-    wallet: string;
-    amount: number;
-}
+const transactions: Transaction[] = getAllItems<Transaction>(STORAGE_KEYS.TRANSACTIONS);
+const wallets: Wallet[] = getAllItems<Wallet>(STORAGE_KEYS.WALLETS);
 
-const initialExpenses: Expense[] = [
-    {
-        id: '1',
-        date: '2025-12-10',
-        description: 'Grocery shopping',
-        category: 'Food & Dining',
-        wallet: 'Cash',
-        amount: 85.50
-    },
-    {
-        id: '2',
-        date: '2025-12-11',
-        description: 'Gas station',
-        category: 'Transportation',
-        wallet: 'Credit Card',
-        amount: 45.00
-    },
-    {
-        id: '3',
-        date: '2025-12-11',
-        description: 'Netflix subscription',
-        category: 'Entertainment',
-        wallet: 'Debit Card',
-        amount: 15.99
-    },
-    {
-        id: '4',
-        date: '2025-12-12',
-        description: 'Coffee shop',
-        category: 'Food & Dining',
-        wallet: 'Cash',
-        amount: 5.75
-    },
-    {
-        id: '5',
-        date: '2025-12-13',
-        description: 'Electricity bill',
-        category: 'Utilities',
-        wallet: 'Bank Transfer',
-        amount: 120.00
+console.log("WALLETS",wallets);
+
+console.log("TRANSACTIONS",transactions);
+
+const findWalletById = (id: string): string | "" => {
+   const wallet =   wallets.find(wallet => wallet.id === id)
+
+    if(wallet){
+        return wallet.name
+    } else {
+        return ""
     }
-];
+
+}
 
 
 const Expenses = () => {
@@ -70,45 +39,86 @@ const Expenses = () => {
                     </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                    {initialExpenses.map((expense: Expense) => (
-                        <tr key={expense.id}  className="hover:bg-gray-50 transition-colors">
+
+                    {transactions.map((transaction: Transaction) => (
+                        <tr key={transaction.id}>
                             <td className="px-6 py-4 text-gray-900">
-                                {new Date(expense.date).toLocaleDateString('en-US', {
+                                {new Date(transaction.date).toLocaleDateString('en-US',{
                                     year: 'numeric',
                                     month: 'short',
-                                    day: 'numeric'
+                                    day: 'numeric',
                                 })}
                             </td>
-                            <td className="px-6 py-4 text-gray-900">{expense.description}</td>
-                            <td className="px-6 py-4">
-                              <span className="inline-flex px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
-                                {expense.category}
-                              </span>
+                            <td className="px-6 py-4 text-gray-900">{transaction.description}</td>
+                            <td className="px-6 py-4 text-gray-900">
+                                <span className={` w-25 inline-flex justify-center px-3 py-1 ${transaction.type === "INCOME" ? `bg-blue-100 text-blue-800 ` : `bg-red-100 text-red-800 `} rounded-full`}>
+                                    {transaction.type}
+                                </span>
                             </td>
-                            <td className="px-6 py-4 text-gray-900">{expense.wallet}</td>
+                            <td className="px-6 py-4 text-gray-900">{findWalletById(transaction.walletId)}</td>
                             <td className="px-6 py-4 text-right text-gray-900">
-                                ${expense.amount.toFixed(2)}
+                                {transaction.amount.toFixed(2)}
                             </td>
+
                             <td className="px-6 py-4">
                                 <div className="flex items-center justify-center gap-2">
                                     <button
-
                                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
                                         aria-label="Edit expense"
                                     >
                                         <Pencil className="w-5 h-5" />
                                     </button>
-                                    <button
 
+                                    <button
                                         className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
                                         aria-label="Delete expense"
                                     >
                                         <Trash2 className="w-5 h-5" />
                                     </button>
+
                                 </div>
                             </td>
                         </tr>
                     ))}
+                    {/*{initialExpenses.map((expense: Expense) => (*/}
+                    {/*    <tr key={expense.id}  className="hover:bg-gray-50 transition-colors">*/}
+                    {/*        <td className="px-6 py-4 text-gray-900">*/}
+                    {/*            {new Date(expense.date).toLocaleDateString('en-US', {*/}
+                    {/*                year: 'numeric',*/}
+                    {/*                month: 'short',*/}
+                    {/*                day: 'numeric'*/}
+                    {/*            })}*/}
+                    {/*        </td>*/}
+                    {/*        <td className="px-6 py-4 text-gray-900">{expense.description}</td>*/}
+                    {/*        <td className="px-6 py-4">*/}
+                    {/*          <span className="inline-flex px-3 py-1 bg-blue-100 text-blue-800 rounded-full">*/}
+                    {/*            {expense.category}*/}
+                    {/*          </span>*/}
+                    {/*        </td>*/}
+                    {/*        <td className="px-6 py-4 text-gray-900">{expense.wallet}</td>*/}
+                    {/*        <td className="px-6 py-4 text-right text-gray-900">*/}
+                    {/*            ${expense.amount.toFixed(2)}*/}
+                    {/*        </td>*/}
+                    {/*        <td className="px-6 py-4">*/}
+                    {/*            <div className="flex items-center justify-center gap-2">*/}
+                    {/*                <button*/}
+
+                    {/*                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"*/}
+                    {/*                    aria-label="Edit expense"*/}
+                    {/*                >*/}
+                    {/*                    <Pencil className="w-5 h-5" />*/}
+                    {/*                </button>*/}
+                    {/*                <button*/}
+
+                    {/*                    className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"*/}
+                    {/*                    aria-label="Delete expense"*/}
+                    {/*                >*/}
+                    {/*                    <Trash2 className="w-5 h-5" />*/}
+                    {/*                </button>*/}
+                    {/*            </div>*/}
+                    {/*        </td>*/}
+                    {/*    </tr>*/}
+                    {/*))}*/}
 
                     </tbody>
                 </table>
