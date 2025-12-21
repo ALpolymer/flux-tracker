@@ -1,7 +1,10 @@
+
+import {useState} from "react";
 import { Pencil, Trash2 } from 'lucide-react';
 import type  {Transaction,Wallet} from "../types";
 import{getAllItems} from "../services/localStorage/localStorageHelpers.ts";
 import {STORAGE_KEYS} from "../services/localStorage/types.ts";
+import EditExpenseDialog from "./EditExpenseDialog.tsx";
 
 
 const transactions: Transaction[] = getAllItems<Transaction>(STORAGE_KEYS.TRANSACTIONS);
@@ -19,14 +22,25 @@ const findWalletById = (id: string): string | "" => {
     } else {
         return ""
     }
-
 }
 
 
 const Expenses = () => {
+    const [showDialog, setShowDialog] = useState(false)
+
+    console.log(showDialog)
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-lg shadow-md overflow-hidden relative">
+
+            <EditExpenseDialog
+                isOpen={showDialog}
+                onClose={() => setShowDialog(false)}
+            >
+                <p>hello</p>
+            </EditExpenseDialog>
+
             <div className="overflow-x-auto">
+
                 <table className="w-full">
                     <thead className="bg-gray-100 border-b border-gray-200">
                     <tr>
@@ -65,6 +79,7 @@ const Expenses = () => {
                                     <button
                                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
                                         aria-label="Edit expense"
+                                        onClick={() => setShowDialog(true)}
                                     >
                                         <Pencil className="w-5 h-5" />
                                     </button>
@@ -80,50 +95,13 @@ const Expenses = () => {
                             </td>
                         </tr>
                     ))}
-                    {/*{initialExpenses.map((expense: Expense) => (*/}
-                    {/*    <tr key={expense.id}  className="hover:bg-gray-50 transition-colors">*/}
-                    {/*        <td className="px-6 py-4 text-gray-900">*/}
-                    {/*            {new Date(expense.date).toLocaleDateString('en-US', {*/}
-                    {/*                year: 'numeric',*/}
-                    {/*                month: 'short',*/}
-                    {/*                day: 'numeric'*/}
-                    {/*            })}*/}
-                    {/*        </td>*/}
-                    {/*        <td className="px-6 py-4 text-gray-900">{expense.description}</td>*/}
-                    {/*        <td className="px-6 py-4">*/}
-                    {/*          <span className="inline-flex px-3 py-1 bg-blue-100 text-blue-800 rounded-full">*/}
-                    {/*            {expense.category}*/}
-                    {/*          </span>*/}
-                    {/*        </td>*/}
-                    {/*        <td className="px-6 py-4 text-gray-900">{expense.wallet}</td>*/}
-                    {/*        <td className="px-6 py-4 text-right text-gray-900">*/}
-                    {/*            ${expense.amount.toFixed(2)}*/}
-                    {/*        </td>*/}
-                    {/*        <td className="px-6 py-4">*/}
-                    {/*            <div className="flex items-center justify-center gap-2">*/}
-                    {/*                <button*/}
 
-                    {/*                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"*/}
-                    {/*                    aria-label="Edit expense"*/}
-                    {/*                >*/}
-                    {/*                    <Pencil className="w-5 h-5" />*/}
-                    {/*                </button>*/}
-                    {/*                <button*/}
-
-                    {/*                    className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"*/}
-                    {/*                    aria-label="Delete expense"*/}
-                    {/*                >*/}
-                    {/*                    <Trash2 className="w-5 h-5" />*/}
-                    {/*                </button>*/}
-                    {/*            </div>*/}
-                    {/*        </td>*/}
-                    {/*    </tr>*/}
-                    {/*))}*/}
 
                     </tbody>
                 </table>
 
            </div>
+
         </div>
     );
 };
