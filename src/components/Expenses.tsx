@@ -35,9 +35,7 @@ const Expenses = () => {
             <EditExpenseDialog
                 isOpen={showDialog}
                 onClose={() => setShowDialog(false)}
-            >
-                <p>hello</p>
-            </EditExpenseDialog>
+            />
 
             <div className="overflow-x-auto">
 
