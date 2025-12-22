@@ -5,30 +5,34 @@ import { getAllItems } from "../services/localStorage/localStorageHelpers";
 import { STORAGE_KEYS } from "../services/localStorage/types";
 import EditExpenseDialog from "./EditExpenseDialog";
 
-const transactions: Transaction[] = getAllItems<Transaction>(
-    STORAGE_KEYS.TRANSACTIONS
-);
-const wallets: Wallet[] = getAllItems<Wallet>(STORAGE_KEYS.WALLETS);
-const categories: Category[] =  getAllItems<Category>(STORAGE_KEYS.CATEGORIES);
 
-const findWalletById = (id: string): string => {
-    const wallet = wallets.find((wallet) => wallet.id === id);
-    return wallet ? wallet.name : "";
-};
 
-const findCategoryById = (id: string) :string => {
-    const category = categories.find((category) => category.id === id);
-    return category ? category.name : "";
-}
 
 const Expenses = () => {
-    const [showDialog, setShowDialog] = useState(false);
+    const [transactions, setTransactions] = useState<Transaction[]>(() => getAllItems<Transaction>(STORAGE_KEYS.TRANSACTIONS));
+    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+    const [wallets] = useState<Wallet[]>(() => getAllItems<Wallet>(STORAGE_KEYS.WALLETS));
+    const [categories] = useState<Category[]>(() => getAllItems(STORAGE_KEYS.CATEGORIES));
+
+    const isDialogOpen = selectedTransaction !== null;
+
+
+    const findWalletById = (id: string): string => {
+        const wallet = wallets.find((wallet) => wallet.id === id);
+        return wallet ? wallet.name : "";
+    };
+
+    const findCategoryById = (id: string) :string => {
+        const category = categories.find((category) => category.id === id);
+        return category ? category.name : "";
+    }
 
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
             <EditExpenseDialog
-                isOpen={showDialog}
-                onClose={() => setShowDialog(false)}
+                isOpen={isDialogOpen}
+                onClose={() => setSelectedTransaction(null)}
+                transaction={selectedTransaction}
             />
 
             <div className="overflow-x-auto">
@@ -123,7 +127,7 @@ const Expenses = () => {
                                     <button
                                         className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
                                         aria-label="Edit"
-                                        onClick={() => setShowDialog(true)}
+                                        onClick={() => setSelectedTransaction(transaction)}
                                     >
                                         <Pencil className="w-4 h-4" />
                                     </button>

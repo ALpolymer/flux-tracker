@@ -1,10 +1,12 @@
 import Dialog from "./Dialog";
+import type {Transaction} from "../types";
 
 interface EditExpenseDialogProps {
     isOpen: boolean;
     onClose: () => void;
+    transaction: Transaction | null;
 }
-const EditExpenseDialog = ({isOpen, onClose}:EditExpenseDialogProps) => {
+const EditExpenseDialog = ({isOpen, onClose, transaction}:EditExpenseDialogProps) => {
     return (
         <Dialog
         isOpen={isOpen}
