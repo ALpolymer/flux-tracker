@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import type { Transaction, Wallet, Category } from "../types";
-import { getAllItems } from "../services/localStorage/localStorageHelpers";
-import { STORAGE_KEYS } from "../services/localStorage/types";
+import {getAllTransactions, updateTransaction} from "../services/localStorage/localStorageTransactions.ts";
+import {getAllWallets} from "../services/localStorage/localStorageWallets.ts";
+import {getAllCategories} from "../services/localStorage/localStorageCategories.ts";
 import EditExpenseDialog from "./EditExpenseDialog";
 
 
 
 
 const Expenses = () => {
-    const [transactions, setTransactions] = useState<Transaction[]>(() => getAllItems<Transaction>(STORAGE_KEYS.TRANSACTIONS));
+    const [transactions, setTransactions] = useState<Transaction[]>(() => getAllTransactions());
     const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
-    const [wallets] = useState<Wallet[]>(() => getAllItems<Wallet>(STORAGE_KEYS.WALLETS));
-    const [categories] = useState<Category[]>(() => getAllItems(STORAGE_KEYS.CATEGORIES));
+    const [wallets] = useState<Wallet[]>(() => getAllWallets());
+    const [categories] = useState<Category[]>(() => getAllCategories());
 
     const isDialogOpen = selectedTransaction !== null;
 
@@ -27,12 +28,21 @@ const Expenses = () => {
         return category ? category.name : "";
     }
 
+    const handleSaveTransaction = (newTransaction: Transaction) => {
+        updateTransaction(newTransaction?.id, newTransaction);
+        setTransactions(prev => prev.map(t => t.id === newTransaction.id ? newTransaction : t));
+        setSelectedTransaction(null);
+    }
+
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
             <EditExpenseDialog
                 isOpen={isDialogOpen}
                 onClose={() => setSelectedTransaction(null)}
+                onSave={handleSaveTransaction}
                 transaction={selectedTransaction}
+                wallets={wallets}
+                categories={categories}
             />
 
             <div className="overflow-x-auto">
