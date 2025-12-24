@@ -61,11 +61,3 @@ password: string;
 confirmPassword: string;
 }
 
-export interface EditTransactionFormFields  {
-    description: string;
-    type: TransactionType;
-    category: string;
-    wallet: string;
-    amount: number;
-    updatedAt: string;
-}

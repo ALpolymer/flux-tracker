@@ -15,7 +15,7 @@ const passwordSchema = z.string()
         .regex(/[0-9]/, "Password must contain at least one number")
         .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character");
 
-const SignUpSchema = z.object({
+const signUpSchema = z.object({
     username: z.string()
         .min(3, "Username must be at least 3 characters long")
         .max(30, "Username too long"),
@@ -49,7 +49,7 @@ const SignUp = () => {
         setError,
         formState: { errors , isSubmitting},
     } = useForm<SignUpFormFields>({
-        resolver: zodResolver(SignUpSchema),
+        resolver: zodResolver(signUpSchema),
         defaultValues: {
             username: "",
             email: "",
