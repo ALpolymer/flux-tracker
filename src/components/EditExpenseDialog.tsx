@@ -3,7 +3,6 @@ import type {Transaction,Wallet,Category} from "../types";
 import {z} from "zod";
 import {useForm, type SubmitHandler} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Schema} from "zod/v3";
 
 interface EditExpenseDialogProps {
     isOpen: boolean;
@@ -66,33 +65,62 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories}:E
 
             <Dialog.Body>
                 <form className="mt-8 space-y-6">
+
+                    <div className="mb-4">
+                        <label htmlFor="type" className="sr-only">Amount</label>
+                        <input
+                            {...register("amount")}
+                            className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        />
+                    </div>
+
+
                     <div className="mb-4">
                         <label htmlFor="type" className="sr-only">Type</label>
                         <input
-                            value={transaction?.type}
+                            {...register("type")}
                             className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                            placeholder="Description"
                         />
                     </div>
+
+
                     <div className="mb-4">
-                        <label htmlFor="description" className="sr-only">Description</label>
+                        <label htmlFor="type" className="sr-only">Description</label>
                         <textarea
-                            value={transaction?.description}
+                            {...register("description")}
                             className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                            placeholder="Username"
                         />
-
                     </div>
+
+
+
                     <div className="mb-4">
-                        <label htmlFor="description" className="sr-only">Description</label>
-                        <input
-                            type="date"
-
-                            className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                            placeholder="Username"
-                        />
-
+                        <label htmlFor="type" className="sr-only">Wallet</label>
+                        <select {...register("walletId")}>
+                            {wallets.map(wallet => (
+                                <option key={wallet.id} value={wallet.id}>
+                                    {wallet.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
+
+
+                    <div className="mb-4">
+                        <label htmlFor="type" className="sr-only">Category</label>
+                        <select {...register("categoryId")}>
+                            {categories.map(category => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+
+
+
+
 
                 </form>
             </Dialog.Body>

@@ -37,6 +37,7 @@ const Expenses = () => {
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
             <EditExpenseDialog
+                key={selectedTransaction?.id}
                 isOpen={isDialogOpen}
                 onClose={() => setSelectedTransaction(null)}
                 onSave={handleSaveTransaction}
