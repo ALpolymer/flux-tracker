@@ -36,12 +36,13 @@ const editTransactionSchema = z.object({
 type EditTransaction = z.infer<typeof editTransactionSchema>
 
 
-const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories}:EditExpenseDialogProps) => {
+const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories, onSave}:EditExpenseDialogProps) => {
 
 
     const {
         register,
         handleSubmit,
+        formState: { errors },
     } =
         useForm<EditTransaction>({
             resolver: zodResolver(editTransactionSchema),
@@ -55,6 +56,27 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories}:E
             }
         }
     );
+
+    const onSubmit: SubmitHandler<EditTransaction> =  (data) => {
+        if (!transaction){
+            return;
+        }
+        const updatedTransaction :Transaction = {
+            id: transaction.id,
+            type: data.type,
+            amount: data.amount,
+            description: data.description,
+            walletId: data.walletId,
+            categoryId: data.categoryId,
+            date: data.date,
+            createdAt: transaction.createdAt,
+            updatedAt: new Date().toISOString(),
+        }
+
+        onSave(updatedTransaction);
+
+    }
+
     return (
         <Dialog
         isOpen={isOpen}
@@ -64,23 +86,29 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories}:E
         >
 
             <Dialog.Body>
-                <form className="mt-8 space-y-6">
+                <form  id="edit-transaction-form" className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
 
                     <div className="mb-4">
                         <label htmlFor="type" className="sr-only">Amount</label>
                         <input
-                            {...register("amount")}
+                            {...register("amount", {valueAsNumber: true})}
                             className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         />
+                        {errors.amount && (
+                            <p className="text-red-600 text-sm">{errors.amount.message}</p>
+                        )}
                     </div>
 
 
                     <div className="mb-4">
                         <label htmlFor="type" className="sr-only">Type</label>
-                        <input
-                            {...register("type")}
-                            className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        />
+                        <select {...register("type")}>
+                            <option value="INCOME">Income</option>
+                            <option value="EXPENSE">Expense</option>
+                        </select>
+                        {errors.type && (
+                            <p className="text-red-600 text-sm">{errors.type.message}</p>
+                        )}
                     </div>
 
 
@@ -90,6 +118,9 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories}:E
                             {...register("description")}
                             className="appearance-none relative block w-full px-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         />
+                        {errors.description && (
+                            <p className="text-red-600 text-sm">{errors.description.message}</p>
+                        )}
                     </div>
 
 
@@ -103,6 +134,9 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories}:E
                                 </option>
                             ))}
                         </select>
+                        {errors.walletId && (
+                            <p className="text-red-600 text-sm">{errors.walletId.message}</p>
+                        )}
                     </div>
 
 
@@ -115,12 +149,18 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories}:E
                                 </option>
                             ))}
                         </select>
+                        {errors.categoryId && (
+                            <p className="text-red-600 text-sm">{errors.categoryId.message}</p>
+                        )}
                     </div>
 
-
-
-
-
+                    <div className="mb-4">
+                        <label htmlFor="type" className="sr-only">Date</label>
+                        <input type="date"  {...register("date")} />
+                        {errors.date && (
+                            <p className="text-red-600 text-sm">{errors.date.message}</p>
+                        )}
+                    </div>
 
                 </form>
             </Dialog.Body>
@@ -133,7 +173,10 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories}:E
                     Cancel
                 </button>
                 <button
-                    onClick={onClose}
+                    type="button"
+
+                    onClick={handleSubmit(onSubmit)}
+
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                     Save

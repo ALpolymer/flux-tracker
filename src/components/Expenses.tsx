@@ -28,9 +28,9 @@ const Expenses = () => {
         return category ? category.name : "";
     }
 
-    const handleSaveTransaction = (newTransaction: Transaction) => {
-        updateTransaction(newTransaction?.id, newTransaction);
-        setTransactions(prev => prev.map(t => t.id === newTransaction.id ? newTransaction : t));
+    const handleSaveTransaction = (updatedTransaction: Transaction) => {
+        updateTransaction(updatedTransaction?.id, updatedTransaction);
+        setTransactions(prev => prev.map(t => t.id === updatedTransaction.id ? updatedTransaction : t));
         setSelectedTransaction(null);
     }
 
