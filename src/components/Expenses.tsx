@@ -62,7 +62,6 @@ const Expenses = () => {
                 isOpen={isDeleteDialogOpen}
                 onClose={() => setTransactionToDelete(null)}
                 onDelete = {handleDeleteTransaction}
-                transaction={transactionToDelete}
             />
 
             <div className="overflow-x-auto">

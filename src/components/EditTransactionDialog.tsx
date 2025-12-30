@@ -4,7 +4,7 @@ import {z} from "zod";
 import {useForm, type SubmitHandler} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 
-interface EditExpenseDialogProps {
+interface EditTransactionDialogProps {
     isOpen: boolean;
     onClose: () => void;
     onSave: (transaction: Transaction) => void;
@@ -36,7 +36,7 @@ const editTransactionSchema = z.object({
 type EditTransaction = z.infer<typeof editTransactionSchema>
 
 
-const EditTransactionDialog = ({isOpen, onClose, transaction, wallets, categories, onSave}:EditExpenseDialogProps) => {
+const EditTransactionDialog = ({isOpen, onClose, transaction, wallets, categories, onSave}:EditTransactionDialogProps) => {
 
 
     const {
