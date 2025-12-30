@@ -1,59 +1,59 @@
-import {NavLink} from 'react-router';
-import LogOut from "./LogOut.tsx";
+import { NavLink, useNavigate } from 'react-router';
+import { LayoutDashboard, Receipt, Wallet, Tags, LogOut } from 'lucide-react';
+import { useAuth } from "../context/useAuth.ts";
+
 const Sidebar = () => {
+    const navigate = useNavigate();
+    const { onLogout } = useAuth();
+
+    const handleLogOut = () => {
+        navigate("/");
+        onLogout();
+    };
+
+    const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+        `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+            isActive
+                ? 'bg-indigo-50 text-indigo-700'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+        }`;
+
     return (
-        <div className="bg-stone-100  flex flex-col items-center justify-start px-8 py-3 border border-transparent shadow rounded-md">
-            Sidebar
-            <nav className="flex flex-col items-center gap-x-2 justify-between">
-                <NavLink
-                    to="dashboard"
-                    className={({ isActive }) =>
-                        `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                            isActive
-                                ? 'bg-indigo-50 text-indigo-700'
-                                : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                        }`
-                    }
-                >
+        <aside className="bg-white h-full flex flex-col border-r border-gray-200">
+            {/* Navigation */}
+            <nav className="flex-1 px-3 py-4 space-y-1">
+                <NavLink to="dashboard" className={navLinkClass}>
+                    <LayoutDashboard className="w-5 h-5" />
                     Dashboard
                 </NavLink>
 
-                <NavLink to="expenses"
-                         className={({ isActive }) =>
-                             `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                 isActive
-                                     ? 'bg-indigo-50 text-indigo-700'
-                                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                             }`
-                         }>
-
-                    Expenses
-                </NavLink>
-                <NavLink to="wallets"
-                         className={({ isActive }) =>
-                             `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                 isActive
-                                     ? 'bg-indigo-50 text-indigo-700'
-                                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                             }`
-                         }
-                >Wallets
+                <NavLink to="expenses" className={navLinkClass}>
+                    <Receipt className="w-5 h-5" />
+                    Transactions
                 </NavLink>
 
-                <NavLink to="categories"
-                         className={({ isActive }) =>
-                             `px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                                 isActive
-                                     ? 'bg-indigo-50 text-indigo-700'
-                                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
-                             }`
-                         }
-                >
+                <NavLink to="wallets" className={navLinkClass}>
+                    <Wallet className="w-5 h-5" />
+                    Wallets
+                </NavLink>
+
+                <NavLink to="categories" className={navLinkClass}>
+                    <Tags className="w-5 h-5" />
                     Categories
                 </NavLink>
-                <LogOut/>
             </nav>
-        </div>
+
+            {/* Logout at bottom */}
+            <div className="px-3 py-4 border-t border-gray-200">
+                <button
+                    onClick={handleLogOut}
+                    className="flex items-center gap-3 px-4 py-2.5 w-full rounded-lg text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 transition-colors"
+                >
+                    <LogOut className="w-5 h-5" />
+                    Log Out
+                </button>
+            </div>
+        </aside>
     );
 };
 

@@ -1,11 +1,13 @@
-import {Outlet} from "react-router";
+import { Outlet } from "react-router";
 import Sidebar from "./Sidebar";
+
 const Tracker = () => {
     return (
-        <main className="bg-stone-300 h-screen py-3 grid grid-cols-[200px_minmax(900px,_1fr)] gap-2">
+        <main className="bg-gray-50 h-[calc(100vh-4rem)] grid grid-cols-[240px_1fr]">
             <Sidebar />
-            <Outlet />
-
+            <div className="p-6 overflow-auto">
+                <Outlet />
+            </div>
         </main>
     );
 };
