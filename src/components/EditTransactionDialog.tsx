@@ -36,7 +36,7 @@ const editTransactionSchema = z.object({
 type EditTransaction = z.infer<typeof editTransactionSchema>
 
 
-const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories, onSave}:EditExpenseDialogProps) => {
+const EditTransactionDialog = ({isOpen, onClose, transaction, wallets, categories, onSave}:EditExpenseDialogProps) => {
 
 
     const {
@@ -174,9 +174,7 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories, o
                 </button>
                 <button
                     type="button"
-
                     onClick={handleSubmit(onSubmit)}
-
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
                 >
                     Save
@@ -187,4 +185,4 @@ const EditExpenseDialog = ({isOpen, onClose, transaction, wallets, categories, o
     );
 };
 
-export default EditExpenseDialog;
+export default EditTransactionDialog;

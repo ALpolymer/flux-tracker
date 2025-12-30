@@ -1,21 +1,24 @@
 import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import type { Transaction, Wallet, Category } from "../types";
-import {getAllTransactions, updateTransaction} from "../services/localStorage/localStorageTransactions.ts";
+import {getAllTransactions, updateTransaction, removeTransaction} from "../services/localStorage/localStorageTransactions.ts";
 import {getAllWallets} from "../services/localStorage/localStorageWallets.ts";
 import {getAllCategories} from "../services/localStorage/localStorageCategories.ts";
-import EditExpenseDialog from "./EditExpenseDialog";
+import EditTransactionDialog from "./EditTransactionDialog.tsx";
+import DeleteTransactionDialog from "./DeleteTransactionDialog.tsx";
 
 
 
 
 const Expenses = () => {
     const [transactions, setTransactions] = useState<Transaction[]>(() => getAllTransactions());
-    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+    const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
+    const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
     const [wallets] = useState<Wallet[]>(() => getAllWallets());
     const [categories] = useState<Category[]>(() => getAllCategories());
 
-    const isDialogOpen = selectedTransaction !== null;
+    const isEditDialogOpen = transactionToEdit !== null;
+    const isDeleteDialogOpen = transactionToDelete !== null;
 
 
     const findWalletById = (id: string): string => {
@@ -31,19 +34,35 @@ const Expenses = () => {
     const handleSaveTransaction = (updatedTransaction: Transaction) => {
         updateTransaction(updatedTransaction?.id, updatedTransaction);
         setTransactions(prev => prev.map(t => t.id === updatedTransaction.id ? updatedTransaction : t));
-        setSelectedTransaction(null);
+        setTransactionToEdit(null);
+    }
+
+    const handleDeleteTransaction = () => {
+        if(!transactionToDelete) return;
+        removeTransaction(transactionToDelete.id);
+        const newTransactions = transactions.filter((transaction: Transaction) => transaction.id !== transactionToDelete.id);
+        setTransactions(newTransactions);
+        setTransactionToDelete(null);
+
     }
 
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
-            <EditExpenseDialog
-                key={selectedTransaction?.id}
-                isOpen={isDialogOpen}
-                onClose={() => setSelectedTransaction(null)}
+            <EditTransactionDialog
+                key={transactionToEdit?.id}
+                isOpen={isEditDialogOpen}
+                onClose={() => setTransactionToEdit(null)}
                 onSave={handleSaveTransaction}
-                transaction={selectedTransaction}
+                transaction={transactionToEdit}
                 wallets={wallets}
                 categories={categories}
+            />
+
+            <DeleteTransactionDialog
+                isOpen={isDeleteDialogOpen}
+                onClose={() => setTransactionToDelete(null)}
+                onDelete = {handleDeleteTransaction}
+                transaction={transactionToDelete}
             />
 
             <div className="overflow-x-auto">
@@ -138,7 +157,7 @@ const Expenses = () => {
                                     <button
                                         className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
                                         aria-label="Edit"
-                                        onClick={() => setSelectedTransaction(transaction)}
+                                        onClick={() => setTransactionToEdit(transaction)}
                                     >
                                         <Pencil className="w-4 h-4" />
                                     </button>
@@ -146,6 +165,7 @@ const Expenses = () => {
                                     <button
                                         className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                                         aria-label="Delete"
+                                        onClick={()=> setTransactionToDelete(transaction)}
                                     >
                                         <Trash2 className="w-4 h-4" />
                                     </button>
