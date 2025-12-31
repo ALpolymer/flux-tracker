@@ -1,14 +1,15 @@
 import Dialog from "./Dialog";
-import type { Transaction, Wallet, Category } from "../types";
+import type {Transaction, Wallet, Category} from "../types";
 import { z } from "zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {generateId} from "../utils/generateId.ts";
 
-interface EditTransactionDialogProps {
+
+interface AddTransactionDialogProps {
     isOpen: boolean;
     onClose: () => void;
     onSave: (transaction: Transaction) => void;
-    transaction: Transaction | null;
     wallets: Wallet[];
     categories: Category[];
 }
@@ -22,69 +23,68 @@ const dateCodec = z.codec(
     }
 );
 
-const editTransactionSchema = z.object({
+const addTransactionSchema = z.object({
     type: z.enum(["INCOME", "EXPENSE"]),
-    amount: z.number().positive("Amount must be positive"),
+    amount: z.number({
+        message: "Please enter a valid amount"
+    }).positive("Amount must be positive"),
     description: z.string().optional(),
     categoryId: z.string().min(1, "Please select a category"),
     walletId: z.string().min(1, "Please select a wallet"),
     date: dateCodec,
-});
+})
 
-type EditTransaction = z.infer<typeof editTransactionSchema>;
+type AddTransaction = z.infer<typeof addTransactionSchema>;
 
-const EditTransactionDialog = ({ isOpen, onClose, transaction, wallets, categories, onSave }: EditTransactionDialogProps) => {
+const AddTransactionDialog = ({isOpen, onClose, wallets, categories, onSave}: AddTransactionDialogProps) => {
+
+
     const {
         register,
+        formState: { errors },
         handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<EditTransaction>({
-        resolver: zodResolver(editTransactionSchema),
-        defaultValues: {
-            type: transaction?.type,
-            amount: transaction?.amount,
-            description: transaction?.description,
-            categoryId: transaction?.categoryId,
-            walletId: transaction?.walletId,
-            date: transaction?.date ? dateCodec.encode(transaction.date) : ""
+    } = useForm<AddTransaction>({
+        resolver: zodResolver(addTransactionSchema),
+        defaultValues:{
+            type: "EXPENSE",
+            amount: undefined,
+            date: dateCodec.encode(new Date().toISOString()),
+            categoryId: "",
+            walletId: "",
+            description: ""
         }
     });
 
-    const onSubmit: SubmitHandler<EditTransaction> = (data) => {
-        if (!transaction) return;
-
-        const updatedTransaction: Transaction = {
-            id: transaction.id,
+    const onSubmit: SubmitHandler<AddTransaction> = (data ) =>{
+        const newTransaction: Transaction = {
+            id: generateId(),
             type: data.type,
             amount: data.amount,
             description: data.description,
             walletId: data.walletId,
             categoryId: data.categoryId,
             date: data.date,
-            createdAt: transaction.createdAt,
-            updatedAt: new Date().toISOString(),
-        };
+            createdAt: new Date().toISOString(),
+        }
 
-        onSave(updatedTransaction);
-    };
+        onSave(newTransaction);
+    }
 
-    // Reusable input styles
+    const labelStyles = "block text-sm font-medium text-gray-700 mb-1.5";
     const inputStyles = "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow";
     const selectStyles = "w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow cursor-pointer";
-    const labelStyles = "block text-sm font-medium text-gray-700 mb-1.5";
     const errorStyles = "text-red-500 text-xs mt-1";
+
 
     return (
         <Dialog
-            isOpen={isOpen}
-            onClose={onClose}
-            title="Edit Transaction"
-            closeOnBackdropClick={false}
+        isOpen={isOpen}
+        onClose={onClose}
+        title="Add New Transaction"
+        closeOnBackdropClick={false}
         >
             <Dialog.Body>
-                <form id="edit-transaction-form" className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-
-                    {/* Type Toggle */}
+                <form  id="add-transaction-form" className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
                     <div>
                         <label className={labelStyles}>Transaction Type</label>
                         <div className="flex gap-2">
@@ -114,7 +114,6 @@ const EditTransactionDialog = ({ isOpen, onClose, transaction, wallets, categori
                         {errors.type && <p className={errorStyles}>{errors.type.message}</p>}
                     </div>
 
-                    {/* Amount */}
                     <div>
                         <label htmlFor="amount" className={labelStyles}>Amount (€)</label>
                         <input
@@ -125,10 +124,10 @@ const EditTransactionDialog = ({ isOpen, onClose, transaction, wallets, categori
                             {...register("amount", { valueAsNumber: true })}
                             className={inputStyles}
                         />
+
                         {errors.amount && <p className={errorStyles}>{errors.amount.message}</p>}
                     </div>
 
-                    {/* Two columns: Wallet & Category */}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="walletId" className={labelStyles}>Wallet</label>
@@ -157,7 +156,7 @@ const EditTransactionDialog = ({ isOpen, onClose, transaction, wallets, categori
                         </div>
                     </div>
 
-                    {/* Date */}
+
                     <div>
                         <label htmlFor="date" className={labelStyles}>Date</label>
                         <input
@@ -169,7 +168,7 @@ const EditTransactionDialog = ({ isOpen, onClose, transaction, wallets, categori
                         {errors.date && <p className={errorStyles}>{errors.date.message}</p>}
                     </div>
 
-                    {/* Description */}
+
                     <div>
                         <label htmlFor="description" className={labelStyles}>
                             Description <span className="text-gray-400 font-normal">(optional)</span>
@@ -183,7 +182,6 @@ const EditTransactionDialog = ({ isOpen, onClose, transaction, wallets, categori
                         />
                         {errors.description && <p className={errorStyles}>{errors.description.message}</p>}
                     </div>
-
                 </form>
             </Dialog.Body>
 
@@ -198,14 +196,14 @@ const EditTransactionDialog = ({ isOpen, onClose, transaction, wallets, categori
                 <button
                     type="button"
                     onClick={handleSubmit(onSubmit)}
-                    disabled={isSubmitting}
                     className="px-4 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                    {isSubmitting ? "Saving..." : "Save Changes"}
+                    Save Transaction
                 </button>
             </Dialog.Footer>
+
         </Dialog>
     );
 };
 
-export default EditTransactionDialog;
+export default AddTransactionDialog;

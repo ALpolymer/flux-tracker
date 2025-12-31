@@ -1,19 +1,22 @@
 import { useState } from "react";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import type { Transaction, Wallet, Category } from "../types";
-import { getAllTransactions, updateTransaction, removeTransaction } from "../services/localStorage/localStorageTransactions.ts";
+import { getAllTransactions, updateTransaction, removeTransaction , addTransaction} from "../services/localStorage/localStorageTransactions.ts";
 import { getAllWallets } from "../services/localStorage/localStorageWallets.ts";
 import { getAllCategories } from "../services/localStorage/localStorageCategories.ts";
 import EditTransactionDialog from "./EditTransactionDialog.tsx";
 import DeleteTransactionDialog from "./DeleteTransactionDialog.tsx";
+import AddTransactionDialog from "./AddTransactionDialog.tsx";
 
 const Expenses = () => {
     const [transactions, setTransactions] = useState<Transaction[]>(() => getAllTransactions());
     const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
     const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+    const [addDialogKey, setAddDialogKey] = useState(0);
     const [wallets] = useState<Wallet[]>(() => getAllWallets());
     const [categories] = useState<Category[]>(() => getAllCategories());
+
 
     const isEditDialogOpen = transactionToEdit !== null;
     const isDeleteDialogOpen = transactionToDelete !== null;
@@ -42,15 +45,17 @@ const Expenses = () => {
         setTransactionToDelete(null);
     };
 
-    // TODO: Implement handleAddTransaction
-    const handleAddTransaction = () => {
+
+    const handleAddTransaction = (newTransaction: Transaction) => {
+        addTransaction(newTransaction);
+        setTransactions([newTransaction, ...transactions]);
         setIsAddDialogOpen(false);
-        // Will implement with AddTransactionDialog
+
     };
 
     return (
         <div className="space-y-6">
-            {/* Page Header - OUTSIDE the table card */}
+
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
@@ -59,7 +64,10 @@ const Expenses = () => {
                     </p>
                 </div>
                 <button
-                    onClick={() => setIsAddDialogOpen(true)}
+                    onClick={() => {
+                        setAddDialogKey(prev => prev + 1);
+                        setIsAddDialogOpen(true);
+                    }}
                     className="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
                 >
                     <Plus className="w-4 h-4" />
@@ -84,14 +92,14 @@ const Expenses = () => {
                 onDelete={handleDeleteTransaction}
             />
 
-            {/* TODO: AddTransactionDialog */}
-            {/* <AddTransactionDialog
+            <AddTransactionDialog
+                key = { addDialogKey }
                 isOpen={isAddDialogOpen}
                 onClose={() => setIsAddDialogOpen(false)}
                 onSave={handleAddTransaction}
                 wallets={wallets}
                 categories={categories}
-            /> */}
+            />
 
             {/* Table Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
