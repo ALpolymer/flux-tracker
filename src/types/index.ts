@@ -62,7 +62,7 @@ confirmPassword: string;
 }
 
 export interface FilterState{
-    type: TransactionType | "ALL";
+    type: "ALL" | "INCOME" | "EXPENSE";
     categoryId: string | null;
     walletId: string | null;
     dateFrom:  string | null;

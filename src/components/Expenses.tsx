@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {useFilterState} from "../hooks/useFilterState.ts";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import type { Transaction, Wallet, Category } from "../types";
 import { getAllTransactions, updateTransaction, removeTransaction , addTransaction} from "../services/localStorage/localStorageTransactions.ts";
@@ -7,9 +8,11 @@ import { getAllCategories } from "../services/localStorage/localStorageCategorie
 import EditTransactionDialog from "./EditTransactionDialog.tsx";
 import DeleteTransactionDialog from "./DeleteTransactionDialog.tsx";
 import AddTransactionDialog from "./AddTransactionDialog.tsx";
+import FilterBar from "./FilterBar.tsx";
 
 const Expenses = () => {
     const [transactions, setTransactions] = useState<Transaction[]>(() => getAllTransactions());
+    const {filteredTransactions, filters, setFilters, resetFilters} = useFilterState(transactions);
     const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
     const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -60,9 +63,10 @@ const Expenses = () => {
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
                     <p className="text-sm text-gray-500 mt-1">
-                        {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
+                        {filteredTransactions.length} of {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
                     </p>
                 </div>
+
                 <button
                     onClick={() => {
                         setAddDialogKey(prev => prev + 1);
@@ -74,6 +78,15 @@ const Expenses = () => {
                     Add Transaction
                 </button>
             </div>
+
+            {/* FILTER BAR - Full width on its own row */}
+            <FilterBar
+                filters={filters}
+                setNewFilters={setFilters}
+                wallets={wallets}
+                categories={categories}
+                onReset={resetFilters}
+            />
 
             {/* Dialogs */}
             <EditTransactionDialog
@@ -123,14 +136,14 @@ const Expenses = () => {
 
                         {/* BODY */}
                         <tbody className="divide-y divide-gray-100">
-                        {transactions.length === 0 ? (
+                        {filteredTransactions.length === 0 ? (
                             <tr>
                                 <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
-                                    No transactions yet. Click "Add Transaction" to create one.
+                                    No transactions found...
                                 </td>
                             </tr>
                         ) : (
-                            transactions.map((transaction) => (
+                            filteredTransactions.map((transaction) => (
                                 <tr
                                     key={transaction.id}
                                     className="hover:bg-gray-50 transition-colors"

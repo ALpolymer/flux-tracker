@@ -36,7 +36,7 @@ export function useFilterState(transactions: Transaction[]) {
     })
 
     return {
-        filteredTransactions,setFilters,filters,resetFilters
+        filteredTransactions, setFilters, filters, resetFilters
     }
 }
 
