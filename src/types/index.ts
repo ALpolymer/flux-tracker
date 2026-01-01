@@ -61,3 +61,11 @@ password: string;
 confirmPassword: string;
 }
 
+export interface FilterState{
+    type: TransactionType | "ALL";
+    categoryId: string | null;
+    walletId: string | null;
+    dateFrom:  string | null;
+    dateTo:  string | null;
+}
+
