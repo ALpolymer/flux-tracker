@@ -12,7 +12,7 @@ import FilterBar from "./FilterBar.tsx";
 
 const Expenses = () => {
     const [transactions, setTransactions] = useState<Transaction[]>(() => getAllTransactions());
-    const {filteredTransactions, filters, setFilters, resetFilters} = useFilterState(transactions);
+    const {sortedAndFilteredTransactions, filters, setFilters, resetFilters} = useFilterState(transactions);
     const [transactionToEdit, setTransactionToEdit] = useState<Transaction | null>(null);
     const [transactionToDelete, setTransactionToDelete] = useState<Transaction | null>(null);
     const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -63,7 +63,7 @@ const Expenses = () => {
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
                     <p className="text-sm text-gray-500 mt-1">
-                        {filteredTransactions.length} of {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
+                        {sortedAndFilteredTransactions.length} of {transactions.length} transaction{transactions.length !== 1 ? 's' : ''}
                     </p>
                 </div>
 
@@ -136,14 +136,14 @@ const Expenses = () => {
 
                         {/* BODY */}
                         <tbody className="divide-y divide-gray-100">
-                        {filteredTransactions.length === 0 ? (
+                        {sortedAndFilteredTransactions.length === 0 ? (
                             <tr>
                                 <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
                                     No transactions found...
                                 </td>
                             </tr>
                         ) : (
-                            filteredTransactions.map((transaction) => (
+                            sortedAndFilteredTransactions.map((transaction) => (
                                 <tr
                                     key={transaction.id}
                                     className="hover:bg-gray-50 transition-colors"

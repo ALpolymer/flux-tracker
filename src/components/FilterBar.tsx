@@ -108,6 +108,29 @@ const FilterBar = ({ filters, wallets, setNewFilters, categories, onReset }: Fil
                     />
                 </div>
 
+
+
+                {/*SORT BY*/}
+                <div className="min-w-[160px]">
+                    <label htmlFor="sortBy" className={labelStyles}>SortBy</label>
+                    <select
+                        id="sortBy"
+                        className={selectStyles}
+                        value={filters.sortBy}
+                        onChange={e => setNewFilters({
+                            ...filters,
+                            sortBy: e.target.value as FilterState["sortBy"],
+                        })}
+                    >
+                        <option value="">None</option>
+                        <option value="AMOUNT_ASC">Amount ascending</option>
+                        <option value="AMOUNT_DESC">Amount descending</option>
+                        <option value="DATE_ASC">Date ascending</option>
+                        <option value="DATE_DESC">Date descending</option>
+
+                    </select>
+                </div>
+
                 {/* RESET BUTTON */}
                 <button
                     onClick={onReset}

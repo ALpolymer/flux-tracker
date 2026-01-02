@@ -7,7 +7,8 @@ export function useFilterState(transactions: Transaction[]) {
         categoryId: null,
         walletId: null,
         dateFrom: null,
-        dateTo:null
+        dateTo:null,
+        sortBy: ""
     });
 
     const resetFilters = () =>{
@@ -16,7 +17,8 @@ export function useFilterState(transactions: Transaction[]) {
             categoryId: null,
             walletId: null,
             dateFrom: null,
-            dateTo:null
+            dateTo:null,
+            sortBy: "",
         })
     }
     const filteredTransactions = transactions.filter((t) => {
@@ -35,8 +37,45 @@ export function useFilterState(transactions: Transaction[]) {
 
     })
 
+
+    const sortFilteredTransactions = (transactions: Transaction[], sortBy: FilterState["sortBy"] ) :Transaction[] => {
+        const sortedTransactions = [...transactions];
+
+        switch(sortBy) {
+            case "AMOUNT_ASC":
+                sortedTransactions.sort((a,b) =>  a.amount - b.amount);
+                break;
+            case "AMOUNT_DESC":
+                sortedTransactions.sort((a,b) =>  b.amount - a.amount);
+                break;
+            case "DATE_ASC":
+                sortedTransactions.sort((a,b) => {
+                    const dateA = new Date(a.date.split("T")[0]).getTime()
+                    const dateB = new Date(b.date.split("T")[0]).getTime()
+
+                    return dateA - dateB;
+                });
+                break;
+            case "DATE_DESC":
+                sortedTransactions.sort((a,b) => {
+                    const dateA = new Date(a.date.split("T")[0]).getTime()
+                    const dateB = new Date(b.date.split("T")[0]).getTime()
+
+                    return dateB - dateA;
+                });
+                break;
+            default: return sortedTransactions;
+        }
+
+        return sortedTransactions;
+    }
+
+    const sortedAndFilteredTransactions = sortFilteredTransactions(filteredTransactions, filters.sortBy)
+
+    console.log(sortedAndFilteredTransactions);
+
     return {
-        filteredTransactions, setFilters, filters, resetFilters
+        sortedAndFilteredTransactions, setFilters, filters, resetFilters
     }
 }
 

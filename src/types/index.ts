@@ -67,5 +67,6 @@ export interface FilterState{
     walletId: string | null;
     dateFrom:  string | null;
     dateTo:  string | null;
+    sortBy : "AMOUNT_ASC" |"AMOUNT_DESC" | "DATE_ASC" | "DATE_DESC" | "";
 }
 
