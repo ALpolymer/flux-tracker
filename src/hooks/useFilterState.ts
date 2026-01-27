@@ -72,7 +72,6 @@ export function useFilterState(transactions: Transaction[]) {
 
     const sortedAndFilteredTransactions = sortFilteredTransactions(filteredTransactions, filters.sortBy)
 
-    console.log(sortedAndFilteredTransactions);
 
     return {
         sortedAndFilteredTransactions, setFilters, filters, resetFilters
