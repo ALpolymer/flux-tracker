@@ -61,6 +61,8 @@ password: string;
 confirmPassword: string;
 }
 
+export type RegisterRequest = Omit<SignUpFormFields, 'confirmPassword'>;
+
 export interface FilterState{
     type: "ALL" | "INCOME" | "EXPENSE";
     categoryId: string | null;
