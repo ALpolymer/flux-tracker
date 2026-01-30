@@ -1,10 +1,10 @@
 import axios from 'axios';
 import  {STORAGE_KEYS} from "../localStorage/types.ts";
 
-
+const apiUrl = import.meta.env.dev.VITE_API_URL;
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: apiUrl,
     headers: {
         "Content-Type": "application/json",
     }
