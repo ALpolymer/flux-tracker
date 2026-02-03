@@ -6,7 +6,7 @@ import Navbar from "./components/Navbar.tsx";
 import NoMatch from "./components/NoMatch.tsx";
 import Tracker from "./components/Tracker.tsx";
 import Dashboard from "./components/Dashboard.tsx";
-import Expenses from "./components/Expenses.tsx";
+import ExpensesPage from "./components/ExpensesPage.tsx";
 import Wallets from "./components/Wallets.tsx";
 import Categories from "./components/Categories.tsx";
 import SignIn from "./components/SignIn.tsx";
@@ -43,7 +43,7 @@ function App() {
                     <Route element={<ProtectedRoute />}>
                         <Route path="flux" element={<Tracker/>}>
                             <Route index element={<Dashboard/>}/>
-                            <Route path="expenses" element={<Expenses/>}/>
+                            <Route path="expenses" element={<ExpensesPage/>}/>
                             <Route path="wallets" element={<Wallets/>}/>
                             <Route path="categories" element={<Categories/>}/>
                             <Route path="dashboard" element={<Dashboard/>}/>
